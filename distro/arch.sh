@@ -93,21 +93,19 @@ echo 'source ~/powerlevel10k/powerlevel10k.zsh-theme' >>~/.zshrc
 
 echo "=> Installiere Fastfetch-Konfiguration..."
   mkdir -p ~/.config/fastfetch
-  cd ~/setup/
-  cp -r ./config/fastfetch/config.jsonc ~/.config/fastfetch/config.jsonc
+
+  cp -r ~/setup/config/fastfetch/config.jsonc ~/.config/fastfetch/config.jsonc
   echo "✓ Fastfetch-Konfiguration kopiert."
 
 echo "=> Installiere Alacritty-Konfiguration..."
   mkdir -p ~/.config/alacritty
-  cd ~/setup/
-  cp -r ./config/alacritty/alacritty.toml ~/.config/alacritty/alacritty.toml
+  cp -r ~/setup/config/alacritty/alacritty.toml ~/.config/alacritty/alacritty.toml
   echo "✓ Alacritty-Konfiguration kopiert."
 
 
 echo "=> zsh config"
- cd ~/setup/
- cp -r ./config/zsh/.zshrc ~/
- cp -r ./config/zsh/.p10k.zsh ~/
+ cp -r ~/setup/config/zsh/.zshrc ~/
+ cp -r ~/setup/config/zsh/.p10k.zsh ~/
  echo "fertig"
 
 
