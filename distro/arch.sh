@@ -91,21 +91,19 @@ EOF
 git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ~/powerlevel10k
 echo 'source ~/powerlevel10k/powerlevel10k.zsh-theme' >>~/.zshrc
 
-echo "=> Installiere Fastfetch-Konfiguration..."
-  mkdir -p ~/.config/fastfetch
-
-  cp -r ~/setup/config/fastfetch/config.jsonc ~/.config/fastfetch/config.jsonc
-  echo "✓ Fastfetch-Konfiguration kopiert."
-
 echo "=> Installiere Alacritty-Konfiguration..."
   mkdir -p ~/.config/alacritty
-  cp -r ~/setup/config/alacritty/alacritty.toml ~/.config/alacritty/alacritty.toml
+  cp /config/alacritty/alacritty.toml ~/.config/alacritty/alacritty.toml
   echo "✓ Alacritty-Konfiguration kopiert."
 
+echo "=> Installiere Fastfetch-Konfiguration..."
+  mkdir -p ~/.config/fastfetch
+  cp /config/fastfetch/config.jsonc ~/.config/fastfetch/config.jsonc
+  echo "✓ Fastfetch-Konfiguration kopiert."
 
 echo "=> zsh config"
- cp -r ~/setup/config/zsh/.zshrc ~/
- cp -r ~/setup/config/zsh/.p10k.zsh ~/
+ cp /config/zsh/.zshrc ~/
+ cp /config/zsh/.p10k.zsh ~/
  echo "fertig"
 
 
