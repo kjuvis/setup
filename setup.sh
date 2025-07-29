@@ -10,12 +10,12 @@ case "$choice" in
   1)
     echo "Starte Arch-Linux..."
     cd distro
-    arch.sh
+    sh arch.sh
     ;;
   2)
     echo "Starte Fedora..."
     cd distro
-    fedora.sh
+    sh fedora.sh
     ;;
   *)
     echo "Ungültige Auswahl – Skript beendet."
