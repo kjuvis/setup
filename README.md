@@ -1,6 +1,4 @@
 
-
-```markdown
 # 🛠️ Multi-Distro Post-Install-Script – Fedora & Arch
 
 Dieses Repository enthält automatisierte Setup-Skripte zur Post-Installation von **Fedora** und **Arch Linux** Systemen (mit Fokus auf KDE)
