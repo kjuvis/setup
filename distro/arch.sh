@@ -44,14 +44,27 @@ echo "Installiere Basis-Pakete und wichtige Programme..."
 sudo pacman -S --noconfirm --needed git base-devel zsh flatpak ufw alacritty kdeconnect vim htop wget curl unzip tar gzip fastfetch vlc 
 
 # 3. Yay installieren (AUR Helper)
+# Bestimme den primären Benutzer, egal ob das Skript als Root läuft oder nicht
+if [ "$EUID" -eq 0 ]; then
+    USERNAME=$(logname)  # Liefert den "echten" Benutzer bei sudo
+else
+    USERNAME=$(whoami)
+fi
+
+# Prüfe, ob yay vorhanden ist
 if ! command -v yay &> /dev/null; then
-    echo "yay nicht gefunden, installiere..."
-    cd /tmp
-    git clone https://aur.archlinux.org/yay.git
-    cd yay
-    makepkg -si --noconfirm
-    cd ..
-    rm -rf yay
+    echo "yay nicht gefunden, installiere als $USERNAME..."
+
+    sudo -u "$USERNAME" bash -c '
+        set -e
+        cd /tmp
+        rm -rf yay 2>/dev/null || true
+        git clone https://aur.archlinux.org/yay.git
+        cd yay
+        makepkg -si --noconfirm
+        cd ..
+        rm -rf yay
+    '
 fi
 
 echo "💡 Preparing Zsh plugins..."
