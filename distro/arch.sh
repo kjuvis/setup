@@ -111,10 +111,31 @@ echo "=> zsh config"
 echo "Füge Flathub Flatpak Repository hinzu..."
 sudo flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
 
-echo "[Snap installieren]"
-sudo pacman -S --noconfirm snapd
+echo "=> Installiere snapd..."
+
+# AUR-Installation mit yay (ohne Bestätigung)
+if command -v yay &> /dev/null; then
+  yay -S --noconfirm snapd
+else
+  echo "yay nicht gefunden. Versuche manuelle Installation..."
+  cd /tmp
+  rm -rf snapd
+  git clone https://aur.archlinux.org/snapd.git
+  cd snapd
+  makepkg -si --noconfirm
+fi
+
+echo "✓ snapd installiert"
+
+# systemd socket aktivieren
+echo "=> Aktiviere snapd.socket..."
 sudo systemctl enable --now snapd.socket
-sudo ln -s /var/lib/snapd/snap /snap || true
+echo "✓ snapd.socket aktiviert"
+
+# Symlink für /snap erstellen (für classic Snaps)
+echo "=> Erstelle Symlink /snap..."
+sudo ln -sf /var/lib/snapd/snap /snap
+echo "✓ Symlink erstellt"
 
 
 # 4. AUR Pakete installieren via yay (discord, spotify, brave-bin, visual-studio-code-bin)
