@@ -91,7 +91,7 @@ EOF
 git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ~/powerlevel10k
 echo 'source ~/powerlevel10k/powerlevel10k.zsh-theme' >>~/.zshrc
 
-cho "=> Starte Konfigurationsinstallation..."
+echo "=> Starte Konfigurationsinstallation..."
 
 # Ermittle Setup-Verzeichnis (z. B. ~/setup)
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
