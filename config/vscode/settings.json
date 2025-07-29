@@ -1,0 +1,6 @@
+{
+    "git.autofetch": true,
+    "git.enableSmartCommit": true,
+    "git.confirmSync": false,
+    "workbench.colorTheme": "Atom One Dark"
+}

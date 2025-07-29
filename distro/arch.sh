@@ -91,24 +91,47 @@ EOF
 git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ~/powerlevel10k
 echo 'source ~/powerlevel10k/powerlevel10k.zsh-theme' >>~/.zshrc
 
+cho "=> Starte Konfigurationsinstallation..."
+
+# Ermittle Setup-Verzeichnis (z. B. ~/setup)
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+USER_HOME=$(eval echo ~$SUDO_USER)
+
+### --- Alacritty ---
 echo "=> Installiere Alacritty-Konfiguration..."
-  mkdir -p ~/.config/alacritty
-  cd ~/setup/
-  cp /config/alacritty/alacritty.toml ~/.config/alacritty/alacritty.toml
-  echo "✓ Alacritty-Konfiguration kopiert."
+mkdir -p "$USER_HOME/.config/alacritty"
+cp -v "$SCRIPT_DIR/config/alacritty/alacritty.toml" "$USER_HOME/.config/alacritty/"
+echo "✓ Alacritty-Konfiguration installiert."
 
+### --- Fastfetch ---
 echo "=> Installiere Fastfetch-Konfiguration..."
-  mkdir -p ~/.config/fastfetch
-   cd ~/setup/
-  cp /config/fastfetch/config.jsonc ~/.config/fastfetch/config.jsonc
-  echo "✓ Fastfetch-Konfiguration kopiert."
+mkdir -p "$USER_HOME/.config/fastfetch"
+cp -v "$SCRIPT_DIR/config/fastfetch/config.jsonc" "$USER_HOME/.config/fastfetch/"
+echo "✓ Fastfetch-Konfiguration installiert."
 
-echo "=> zsh config"
- cd ~/setup/
- cp /config/zsh/.zshrc ~/
-cd ~/setup/
- cp /config/zsh/.p10k.zsh ~/
- echo "fertig"
+### --- ZSH ---
+echo "=> Installiere ZSH-Konfiguration..."
+cp -v "$SCRIPT_DIR/config/zsh/.zshrc" "$USER_HOME/"
+cp -v "$SCRIPT_DIR/config/zsh/.p10k.zsh" "$USER_HOME/"
+echo "✓ ZSH-Konfiguration installiert."
+
+### --- VS Code ---
+echo "=> Installiere VS Code-Konfiguration..."
+VSCODE_USER_DIR="$USER_HOME/.config/Code/User"
+mkdir -p "$VSCODE_USER_DIR"
+cp -v "$SCRIPT_DIR/config/vscode/settings.json" "$VSCODE_USER_DIR/"
+# Optional:
+# cp -v "$SCRIPT_DIR/config/vscode/keybindings.json" "$VSCODE_USER_DIR/"
+echo "✓ VS Code-Konfiguration installiert."
+
+### --- Obsidian ---
+echo "=> Installiere Obsidian-Konfiguration..."
+VAULT_DIR="$USER_HOME/Documents/ObsidianVault"
+mkdir -p "$VAULT_DIR"
+cp -rv "$SCRIPT_DIR/config/obsidian/.obsidian" "$VAULT_DIR/"
+echo "✓ Obsidian-Konfiguration installiert."
+
+echo "✅ Alle Konfigurationen erfolgreich installiert."
 
 
 # 8. Flatpak Repository hinzufügen (flathub)
