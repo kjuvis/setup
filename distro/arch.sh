@@ -91,23 +91,24 @@ EOF
 git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ~/powerlevel10k
 echo 'source ~/powerlevel10k/powerlevel10k.zsh-theme' >>~/.zshrc
 
-# Basisverzeichnis ermitteln
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-USER_HOME=$(eval echo ~$SUDO_USER)
-
 echo "=> Installiere Fastfetch-Konfiguration..."
-mkdir -p "$USER_HOME/.config/fastfetch"
-cp -r "$SCRIPT_DIR/config/fastfetch/config.jsonc" "$USER_HOME/.config/fastfetch/"
+  mkdir -p ~/.config/fastfetch
+  cd ~/setup/
+  cp -r ./config/fastfetch/config.jsonc ~/.config/fastfetch/config.jsonc
+  echo "✓ Fastfetch-Konfiguration kopiert."
 
 echo "=> Installiere Alacritty-Konfiguration..."
-mkdir -p "$USER_HOME/.config/alacritty"
-cp -r "$SCRIPT_DIR/config/alacritty/alacritty.toml" "$USER_HOME/.config/alacritty/"
+  mkdir -p ~/.config/alacritty
+  cd ~/setup/
+  cp -r ./config/alacritty/alacritty.toml ~/.config/alacritty/alacritty.toml
+  echo "✓ Alacritty-Konfiguration kopiert."
+
 
 echo "=> zsh config"
-cp -r "$SCRIPT_DIR/config/zsh/.zshrc" "$USER_HOME/"
-cp -r "$SCRIPT_DIR/config/zsh/.p10k.zsh" "$USER_HOME/"
-
-echo "✓ Alles erfolgreich kopiert."
+ cd ~/setup/
+ cp -r ./config/zsh/.zshrc ~/
+ cp -r ./config/zsh/.p10k.zsh ~/
+ echo "fertig"
 
 
 # 8. Flatpak Repository hinzufügen (flathub)
