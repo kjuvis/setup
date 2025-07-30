@@ -1,42 +1,37 @@
 #!/bin/bash
 set -e
 
-#!/bin/bash
-
-# Auswahlmenü: GPU-Treiber
-echo "----------------------------------"
-echo " 🎮 Wähle deinen Grafiktreiber:"
-echo " 1) AMD"
-echo " 2) NVIDIA"
-echo " 3) Keiner"
-echo "----------------------------------"
-read -rp "Deine Auswahl [1-3]: " GPU_CHOICE
-
-case "$GPU_CHOICE" in
-  1)
-    echo "🟣 AMD-Treiber wird installiert..."
-    sudo pacman -S --noconfirm mesa vulkan-radeon libva-mesa-driver libva-utils
-    ;;
-  2)
-    echo "🟡 NVIDIA-Treiber wird installiert..."
-    sudo pacman -S --noconfirm nvidia nvidia-utils nvidia-settings
-    ;;
-  3)
-    echo "⚪ Kein Grafiktreiber wird installiert."
-    ;;
-  *)
-    echo "❌ Ungültige Auswahl. Es wird kein Treiber installiert."
-    ;;
-esac
-
-echo "✅ GPU-Setup abgeschlossen."
-echo "➡️ Fortsetzung des Arch-Setups ..."
-sleep 2
+echo "Treiber"
+  cd "$SCRIPT_DIR/global/"
+  sh treiber.sh
 
 
-# 1. System aktualisieren
+#System aktualisieren
 echo "System aktualisieren..."
 sudo pacman -Syu --noconfirm
+
+#install flatpak und snap
+sudo pacman -S --noconfirm --needed flatpak
+echo "Füge Flathub Flatpak Repository hinzu..."
+sudo flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
+echo "=> Installiere snapd..."
+if command -v yay &> /dev/null; then          # AUR-Installation mit yay (ohne Bestätigung)
+  yay -S --noconfirm snapd
+else
+  echo "yay nicht gefunden. Versuche manuelle Installation..."
+  cd /tmp
+  rm -rf snapd
+  git clone https://aur.archlinux.org/snapd.git
+  cd snapd
+  makepkg -si --noconfirm
+fi
+echo "✓ snapd installiert"
+echo "=> Aktiviere snapd.socket..."           # systemd socket aktivieren
+sudo systemctl enable --now snapd.socket
+echo "✓ snapd.socket aktiviert"
+echo "=> Erstelle Symlink /snap..."           # Symlink für /snap erstellen (für classic Snaps)
+sudo ln -sf /var/lib/snapd/snap /snap
+echo "✓ Symlink erstellt"
 
 # 2. Basis-Pakete installieren (inkl. wichtige Tools ohne NM, Firefox, PulseAudio, pavucontrol)
 echo "Installiere Basis-Pakete und wichtige Programme..."
@@ -67,125 +62,29 @@ if ! command -v yay &> /dev/null; then
     '
 fi
 
-echo "💡 Preparing Zsh plugins..."
-touch ~/.zshrc
-mkdir -p ~/.zsh/plugins
-
-git clone https://github.com/zsh-users/zsh-autosuggestions ~/.zsh/plugins/zsh-autosuggestions
-#git clone https://github.com/zsh-users/zsh-syntax-highlighting ~/.zsh/plugins/zsh-syntax-highlighting
-git clone https://github.com/zsh-users/zsh-completions ~/.zsh/plugins/zsh-completions
-
-echo "📜 Updating .zshrc with plugin configuration..."
-cat << 'EOF' >> ~/.zshrc
-
-# Plugin Paths
-fpath+=~/.zsh/plugins/zsh-completions
-
-# Load Plugins
-source ~/.zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
-autoload -Uz compinit && compinit
-EOF
-
-#source ~/.zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
-
-git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ~/powerlevel10k
-echo 'source ~/powerlevel10k/powerlevel10k.zsh-theme' >>~/.zshrc
-
-echo "=> Starte Konfigurationsinstallation..."
-
-# Ermittle Setup-Verzeichnis (z. B. ~/setup)
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-USER_HOME=$(eval echo ~$SUDO_USER)
-
-### --- Alacritty ---
-echo "=> Installiere Alacritty-Konfiguration..."
-mkdir -p "$USER_HOME/.config/alacritty"
-cp -v "$SCRIPT_DIR/config/alacritty/alacritty.toml" "$USER_HOME/.config/alacritty/"
-echo "✓ Alacritty-Konfiguration installiert."
-
-### --- Fastfetch ---
-echo "=> Installiere Fastfetch-Konfiguration..."
-mkdir -p "$USER_HOME/.config/fastfetch"
-cp -v "$SCRIPT_DIR/config/fastfetch/config.jsonc" "$USER_HOME/.config/fastfetch/"
-echo "✓ Fastfetch-Konfiguration installiert."
-
-### --- ZSH ---
-echo "=> Installiere ZSH-Konfiguration..."
-cp -v "$SCRIPT_DIR/config/zsh/.zshrc" "$USER_HOME/"
-cp -v "$SCRIPT_DIR/config/zsh/.p10k.zsh" "$USER_HOME/"
-echo "✓ ZSH-Konfiguration installiert."
-
-### --- VS Code ---
-echo "=> Installiere VS Code-Konfiguration..."
-VSCODE_USER_DIR="$USER_HOME/.config/Code/User"
-mkdir -p "$VSCODE_USER_DIR"
-cp -v "$SCRIPT_DIR/config/vscode/settings.json" "$VSCODE_USER_DIR/"
-# Optional:
-# cp -v "$SCRIPT_DIR/config/vscode/keybindings.json" "$VSCODE_USER_DIR/"
-echo "✓ VS Code-Konfiguration installiert."
-
-### --- Obsidian ---
-echo "=> Installiere Obsidian-Konfiguration..."
-VAULT_DIR="$USER_HOME/Documents/ObsidianVault"
-mkdir -p "$VAULT_DIR"
-cp -rv "$SCRIPT_DIR/config/obsidian/.obsidian" "$VAULT_DIR/"
-echo "✓ Obsidian-Konfiguration installiert."
-
-echo "✅ Alle Konfigurationen erfolgreich installiert."
-
-
-# 8. Flatpak Repository hinzufügen (flathub)
-echo "Füge Flathub Flatpak Repository hinzu..."
-sudo flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
-
-echo "=> Installiere snapd..."
-
-# AUR-Installation mit yay (ohne Bestätigung)
-if command -v yay &> /dev/null; then
-  yay -S --noconfirm snapd
-else
-  echo "yay nicht gefunden. Versuche manuelle Installation..."
-  cd /tmp
-  rm -rf snapd
-  git clone https://aur.archlinux.org/snapd.git
-  cd snapd
-  makepkg -si --noconfirm
-fi
-
-echo "✓ snapd installiert"
-
-# systemd socket aktivieren
-echo "=> Aktiviere snapd.socket..."
-sudo systemctl enable --now snapd.socket
-echo "✓ snapd.socket aktiviert"
-
-# Symlink für /snap erstellen (für classic Snaps)
-echo "=> Erstelle Symlink /snap..."
-sudo ln -sf /var/lib/snapd/snap /snap
-echo "✓ Symlink erstellt"
-
 
 # 4. AUR Pakete installieren via yay (discord, spotify, brave-bin, visual-studio-code-bin)
 echo "Installiere AUR Pakete via yay..."
 yay -S --noconfirm --needed discord spotify brave-bin visual-studio-code-bin obsidian protonvpn-cli-ng
 
-echo "Look and Feel"
-lookandfeeltool -a org.kde.breezedark.desktop
-plasma-apply-colorscheme BreezeDark
 
-xdg-settings get default-web-browser
-xdg-mime default brave-browser.desktop x-scheme-handler/http
-xdg-mime default brave-browser.desktop x-scheme-handler/https
+echo "zsh"
+  cd "$SCRIPT_DIR/global/"
+  sh zsh.sh
 
-xdg-mime default vlc.desktop video/x-matroska
-xdg-mime default vlc.desktop video/mp4
-xdg-mime default vlc.desktop video/x-msvideo
-xdg-mime default vlc.desktop audio/mpeg
-xdg-mime default vlc.desktop audio/x-wav
-xdg-mime default vlc.desktop audio/x-flac
-xdg-mime default vlc.desktop audio/ogg
-xdg-mime default vlc.desktop audio/mp4
-xdg-mime default vlc.desktop application/ogg
+echo "config"
+  cd "$SCRIPT_DIR/global/"
+  sh config.sh
+
+echo "hotkeys"
+  cd "$SCRIPT_DIR/global/"
+  sh hk.sh
+
+echo "installiert global datei"
+  cd "$SCRIPT_DIR/global/"
+  sh look.sh
+echo "look and feel + defaultprogramme gesetzt"
+
 
 # 5. UFW Firewall aktivieren und konfigurieren
 echo "Konfiguriere UFW Firewall..."
