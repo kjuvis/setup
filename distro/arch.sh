@@ -1,9 +1,12 @@
 #!/bin/bash
 set -e
 
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+USER_HOME=$(eval echo ~$SUDO_USER)
+
+
 echo "Treiber"
-  cd "$SCRIPT_DIR/global/"
-  sh treiber.sh
+bash "$SCRIPT_DIR/global/treiber.sh"
 
 
 #System aktualisieren
@@ -69,20 +72,16 @@ yay -S --noconfirm --needed discord spotify brave-bin visual-studio-code-bin obs
 
 
 echo "zsh"
-  cd "$SCRIPT_DIR/global/"
-  sh zsh.sh
+bash "$SCRIPT_DIR/global/zsh.sh"
 
 echo "config"
-  cd "$SCRIPT_DIR/global/"
-  sh config.sh
+bash "$SCRIPT_DIR/global/config.sh"
 
 echo "hotkeys"
-  cd "$SCRIPT_DIR/global/"
-  sh hk.sh
+bash "$SCRIPT_DIR/global/hk.sh"
 
 echo "installiert global datei"
-  cd "$SCRIPT_DIR/global/"
-  sh look.sh
+bash "$SCRIPT_DIR/global/look.sh"
 echo "look and feel + defaultprogramme gesetzt"
 
 
