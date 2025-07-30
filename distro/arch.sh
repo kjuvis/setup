@@ -6,7 +6,7 @@ USER_HOME=$(eval echo ~$SUDO_USER)
 
 
 echo "Treiber"
-bash "$SCRIPT_DIR/global/treiber.sh"
+bash "$SCRIPT_DIR/../global/treiber.sh"
 
 
 #System aktualisieren
@@ -72,16 +72,16 @@ yay -S --noconfirm --needed discord spotify brave-bin visual-studio-code-bin obs
 
 
 echo "zsh"
-bash "$SCRIPT_DIR/global/zsh.sh"
+bash "$SCRIPT_DIR/../global/zsh.sh"
 
 echo "config"
-bash "$SCRIPT_DIR/global/config.sh"
+bash "$SCRIPT_DIR/../global/config.sh"
 
 echo "hotkeys"
-bash "$SCRIPT_DIR/global/hk.sh"
+bash "$SCRIPT_DIR/../global/hk.sh"
 
 echo "installiert global datei"
-bash "$SCRIPT_DIR/global/look.sh"
+bash "$SCRIPT_DIR/../global/look.sh"
 echo "look and feel + defaultprogramme gesetzt"
 
 
