@@ -42,7 +42,6 @@ echo "snap und flatpak install"
 flatpak install -y flathub com.spotify.Client
 flatpak install -y flathub org.libreoffice.LibreOffice
 flatpak install -y flathub com.discordapp.Discord
-sudo snap install obsidian --classic
   
 echo "=> Weitere Programme"
   sudo dnf install git zsh btop obs-studio java-latest-openjdk java-latest-openjdk-devel krita fastfetch alacritty vlc protonvpn-cli -y
@@ -67,6 +66,8 @@ bash "$SCRIPT_DIR/../global/hk.sh"
 echo "installiert global datei"
 bash "$SCRIPT_DIR/../global/look.sh"
 echo "look and feel + defaultprogramme gesetzt"
+
+sudo snap install obsidian --classic
 
 
 echo "⚙️ Setting Zsh as default shell..."
