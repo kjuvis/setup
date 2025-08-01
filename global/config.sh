@@ -4,7 +4,7 @@ echo "=> Starte Konfigurationsinstallation..."
 
 # Ermittle Setup-Verzeichnis (z. B. ~/setup)
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-USER_HOME=$(eval echo ~$SUDO_USER)
+USER_HOME="$HOME"
 
 ### --- Alacritty ---
 echo "=> Installiere Alacritty-Konfiguration..."
